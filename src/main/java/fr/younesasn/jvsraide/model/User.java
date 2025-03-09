@@ -1,28 +1,36 @@
 package fr.younesasn.jvsraide.model;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import com.fasterxml.jackson.annotation.*;
+import jakarta.persistence.*;
+import lombok.Data;
+import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
 @Entity
+@Data
+@Getter
 public class User {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Getter
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    private String comment;
 
-    public Long getId() {
-        return id;
-    }
+    @Getter
+    @Setter
+    private String firstname;
 
-    public String getComment() {
-        return comment;
-    }
+    @Getter
+    @Setter
+    private String lastname;
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+    @Getter
+    @Setter
+    private String username;
+
+    @Setter
+    @OneToMany(mappedBy = "user")
+    @JsonIgnoreProperties({"user"})
+    private List<Sraide> sraides;
 }

@@ -21,12 +21,12 @@ public class SraideController {
 
     @GetMapping
     public ResponseEntity<List<Sraide>> getAll() {
-        return new ResponseEntity<>(this.sraideRepository.findAll(), HttpStatus.OK);
+        return new ResponseEntity<>(sraideRepository.findAll(), HttpStatus.OK);
     }
 
     @PostMapping
     public ResponseEntity<Sraide> create(@RequestBody Sraide sraide) {
-        Sraide sraideCreated = this.sraideRepository.save(sraide);
+        Sraide sraideCreated = sraideRepository.save(sraide);
         return new ResponseEntity<>(sraideCreated, HttpStatus.CREATED);
     }
 
@@ -40,13 +40,12 @@ public class SraideController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<Sraide> update(@PathVariable Long id, @RequestBody Sraide sraideModified) {
+    public ResponseEntity<Sraide> udpate(@PathVariable Long id, @RequestBody Sraide sraideModified) {
         Optional<Sraide> sraide = sraideRepository.findById(id);
+
         if (sraide.isPresent()) {
             Sraide existingSraide = sraide.get();
-            existingSraide.setFirstname(sraideModified.getFirstname());
-            existingSraide.setLastname(sraideModified.getLastname());
-            existingSraide.setUsername(sraideModified.getUsername());
+            existingSraide.setComment(sraideModified.getComment());
 
             Sraide updatedSraide = sraideRepository.save(existingSraide);
             return new ResponseEntity<>(updatedSraide, HttpStatus.OK);
@@ -62,7 +61,6 @@ public class SraideController {
             sraideRepository.delete(sraide.get());
             return new ResponseEntity<>("Sraide bien supprimé", HttpStatus.OK);
         }
-
-        return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        return new ResponseEntity<>("Sraide non trouvé", HttpStatus.NOT_FOUND);
     }
 }
