@@ -6,6 +6,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,9 @@ public class UserController {
 
     @PostMapping
     public ResponseEntity<User> create(@RequestBody User user) {
+        user.setFollowing(0);
+        user.setFollower(0);
+        user.setSubscribeDate(new Date());
         User userCreated = this.userRepository.save(user);
         return new ResponseEntity<>(userCreated, HttpStatus.CREATED);
     }
@@ -44,9 +48,10 @@ public class UserController {
         Optional<User> user = userRepository.findById(id);
         if (user.isPresent()) {
             User existingUser = user.get();
-            existingUser.setFirstname(userModified.getFirstname());
             existingUser.setLastname(userModified.getLastname());
             existingUser.setUsername(userModified.getUsername());
+            existingUser.setFirstname(userModified.getFirstname());
+            existingUser.setDescription(userModified.getDescription());
 
             User updatedUser = userRepository.save(existingUser);
             return new ResponseEntity<>(updatedUser, HttpStatus.OK);
